@@ -1,0 +1,12 @@
+En esta carpeta estaría la implementación en PYTHON de los cálculos que mencionamos en clase.
+
+Implementando:
+
+phi(x) <----- vector de características
+dot(x) <----- producto punto del vector de peso y vector de características
+res(w, x, y) <----- Función que calcula el residual
+Loss(w, x, y) <----- Función que calcula la pérdida. (Para este se necesita res(w, x, y))
+TrainLoss(w, data) <----- Función que nos calcula el promedio de las pérdidas de todos los datos.
+gradient_descent(data, learning_rate , ephocs) <----- Algoritmo de descenso de gradiente, se necesita la data, es decir, en mi casi un arreglo
+                                                      de parejas (x, y), un learning_rate (o eta), que hará que al actualizar los pesos se vaya acercando poco a poquito y ephocs, que por el nombre
+                                                      dice son las épocas.
