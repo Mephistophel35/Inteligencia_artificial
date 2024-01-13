@@ -2,51 +2,49 @@ def phi(x):
     return [1, x]
 
 def dot(v1, v2):
-    sum = 0
+    return (v1[0]*v2[0]) + (v1[1]*v2[1])
 
-    for i in range(len(v1)):
-        sum += (v1[i]*v2[i])
-    
-    return sum
+def Loss(x, y, w):
+    return (dot(w, phi(x))-y) ** 2
 
-def res(w, x, y):
-    return (dot(w, phi(x)) - y)
+def vAdd(v1, v2):
+    return [ v1[0] + v2[0] , v1[1] + v2[1] ]
 
-def Loss(w, x, y):
-    return pow(res(w, x, y),2)
+def pScale(k, v):
+    return [k*v[0], k*v[1]]
 
-def TrainLoss(w, data):
+def gradiantDescent(epochs, training_rate, data):
 
-    total_loss = 0
+    w = [0,0]
 
-    for i in data:
-        x, y = i
-        loss = Loss(w, x, y)
-        total_loss += loss
-
-    average_loss = total_loss / len(data)
-
-    return average_loss
-
-def gradient_descent(data, learning_rate , ephocs):
-
-    w = [0, 0]
-
-    m = len(data)
-
-    for ephocs in range(ephocs):
-        total_loss = 0
-    
-        for i in data:
-            x, y = i
-            prediction = dot(w, phi(x))
-            loss = res(w, x, y)
-            
-            for i in range(len(w)):
-                w[i] = w[i] - learning_rate * loss * phi(x)[i]
-            
-            total_loss += Loss(w, x, y)
+    for epoch in range(epochs):
         
-        average_loss = total_loss / m
+        for i in data:
+
+            x, y = i
+
+            grad = pScale(2, phi(x))
+            grad = pScale(dot(w, phi(x)) - y, grad)
+
+            w = vAdd(w, pScale(-training_rate, grad))
     
     return w
+
+
+
+data = [(1,1), (2,3), (4, 3)]
+
+final_weights = gradiantDescent(9000, 0.00015, data)
+
+print("Pesos finales: ", final_weights)
+
+
+
+
+
+
+
+
+
+
+# ~Mephisto
