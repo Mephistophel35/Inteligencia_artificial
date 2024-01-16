@@ -1,42 +1,50 @@
+data = [(1,1), (2,3), (4, 3)]
+
 def phi(x):
     return [1, x]
 
 def dot(v1, v2):
-    return (v1[0]*v2[0]) + (v1[1]*v2[1])
+    return sum(c1*c2 for c1, c2 in zip(v1, v2))
 
-def Loss(x, y, w):
-    return (dot(w, phi(x))-y) ** 2
+def loss(x, y, w):
+    return (predict(w, x) - y) ** 2
 
 def vAdd(v1, v2):
-    return [ v1[0] + v2[0] , v1[1] + v2[1] ]
+    return [c1+c2 for c1, c2 in zip(v1, v2)]
 
 def pScale(k, v):
-    return [k*v[0], k*v[1]]
+    return [k*c for c in v]
 
-def gradiantDescent(epochs, training_rate, data):
+def predict(w, x):
+    return dot(w, phi(x))
 
-    w = [0,0]
-
-    for epoch in range(epochs):
-        
-        for i in data:
-
-            x, y = i
-
-            grad = pScale(2, phi(x))
-            grad = pScale(dot(w, phi(x)) - y, grad)
-
-            w = vAdd(w, pScale(-training_rate, grad))
+def train_loss(w, data):
+    loss_total = 0 
+    for x, y in data:
+        loss_total += loss(x, y, w)
     
-    return w
+    return loss_total / len(data)
+
+def grad_train_loss(w):
+    total = [0, 0]
+    for x, y in data:
+        total = vAdd(total, pScale(2*(predict(w, x)-y),phi(x)))
+
+    return pScale(1/len(data), total)
+
+def gd_step(w, eta):
+    return vAdd(w, pScale(-eta, grad_train_loss(w)))
+
+def testis(w, eta):
+    w2 = gd_step(w, eta)
+    return w2, train_loss(w2, data)
+
+w = [0, 0]
+
+print(testis(w, 0.05))
+        
 
 
-
-data = [(1,1), (2,3), (4, 3)]
-
-final_weights = gradiantDescent(9000, 0.00015, data)
-
-print("Pesos finales: ", final_weights)
 
 
 
